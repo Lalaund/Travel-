@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2b1b13">
+<title>Our little world tour — The Journal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=IM+Fell+English:ital@0;1&display=swap');
+:root{--ink:#30251c;--brown:#4b2d1e;--leather:#3a2118;--gold:#bd9657;--paper:#f2e8d2;--paper2:#e9dcc0;--muted:#78684f;--rust:#984b31;--green:#566348}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 15%,#604735 0,#2b1b13 62%,#1c120e 100%);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 16px 36px;position:relative}
+.scene{width:min(1050px,100%);perspective:1800px}
+.cover-screen{display:flex;flex-direction:column;align-items:center;gap:18px;transition:opacity .5s,transform .5s}
+.intro{color:#e9d7b7;text-align:center}
+.intro .eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#c4a36d}
+.intro h1{font:500 clamp(36px,6vw,60px)/.95 'Cormorant Garamond',serif;margin:9px 0;color:#f0e1c5}
+.intro p{font:italic 18px 'IM Fell English',serif;color:#cdbb9b;margin:0}
+.book-cover{width:min(440px,86vw);height:min(590px,119vw);max-height:590px;min-height:470px;position:relative;cursor:pointer;border:1px solid #8c653d;border-radius:9px 16px 16px 9px;
+ background:linear-gradient(90deg,#1d100b 0,#432719 4%,#68432a 9%,#3d2419 13%,#51301e 45%,#382016 100%);
+ box-shadow:inset 9px 0 14px #120b08aa,inset -5px 0 13px #160c08aa,14px 22px 35px #10090599,0 0 0 5px #21130e,0 0 0 6px #9b7548;transform:rotate(-1deg);transition:transform .35s,filter .35s;overflow:hidden}
+.book-cover:hover{transform:rotate(0) translateY(-5px);filter:brightness(1.08)}
+.book-cover:before{content:"";position:absolute;inset:17px;border:1px solid #b18a55;border-radius:5px 9px 9px 5px;box-shadow:inset 0 0 0 3px #bd96551c,0 0 0 1px #26150e}
+.book-cover:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(7deg,transparent 0 9px,#d5a56a08 10px,#1209050b 12px,transparent 15px),radial-gradient(ellipse at 70% 22%,#b9823a20,transparent 38%);pointer-events:none}
+.spine{position:absolute;left:31px;top:0;bottom:0;width:26px;background:linear-gradient(90deg,#1b0e09,#75472a 45%,#2b170f);border-left:1px solid #9b7445;border-right:1px solid #1b100b;box-shadow:3px 0 8px #10080566}
+.spine:before,.spine:after{content:"";position:absolute;left:2px;right:2px;height:8px;border-top:1px solid #a77d49;border-bottom:1px solid #a77d49}
+.spine:before{top:28px}.spine:after{bottom:28px}
+.cover-content{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:55px 45px 48px 74px;color:#e5c99b}
+.cover-ornament{font-size:26px;color:#c6a16b;letter-spacing:8px;margin-bottom:28px}
+.cover-title{font:500 clamp(35px,6vw,51px)/.95 'IM Fell English',serif;text-shadow:0 2px 3px #170c07;margin:0 0 15px}
+.cover-sub{font:italic 17px 'Cormorant Garamond',serif;color:#d0b58a;line-height:1.4}
+.cover-rule{height:1px;width:115px;background:#b38a53;margin:23px auto}
+.cover-small{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#bd9a6a}
+.cover-compass{font-size:54px;margin-top:34px;color:#c4a06c;opacity:.85}
+.click-hint{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#d2bd9b;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.5}}
+.journal{display:none;opacity:0;transform:translateY(18px) scale(.98);transition:opacity .55s,transform .55s}
+.journal.open{display:block}
+.journal.visible{opacity:1;transform:translateY(0) scale(1)}
+.book-spread{display:grid;grid-template-columns:1fr 1fr;min-height:650px;filter:drop-shadow(0 25px 28px #10090588);position:relative}
+.page{background:var(--paper);position:relative;overflow:hidden;padding:34px 38px 27px;min-height:650px}
+.page.left{border-radius:7px 0 0 7px;background:linear-gradient(90deg,#d9c9a9 0,#f1e7d2 6%,#f4ead5 100%);box-shadow:inset -14px 0 17px -17px #4e3824}
+.page.right{border-radius:0 7px 7px 0;background:linear-gradient(90deg,#e9dcc2 0,#f4ead5 7%,#f0e5ce 100%);box-shadow:inset 14px 0 17px -17px #4e3824}
+.page:before{content:"";position:absolute;inset:13px;border:1px solid #c9b58e;pointer-events:none;opacity:.7}
+.page:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='.24'/%3E%3C/svg%3E")}
+.page-inner{position:relative;z-index:1;height:100%;display:flex;flex-direction:column}
+.page-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #cbb993;padding-bottom:10px;color:#877454;font-size:9px;letter-spacing:2px;text-transform:uppercase}
+.page-top .star{color:var(--rust);font-size:15px}
+.page-heading{font:600 clamp(30px,4vw,43px)/.94 'IM Fell English',serif;margin:19px 0 5px;color:#493526}
+.place-country{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--rust);font-weight:700}
+.lead{font:italic 17px/1.35 'Cormorant Garamond',serif;color:#66533d;margin:12px 0 17px}
+.collage{display:grid;grid-template-columns:1.2fr .8fr;grid-template-rows:118px 118px;gap:8px;margin:4px 0 13px}
+.collage img{width:100%;height:100%;object-fit:cover;border:4px solid #fff9eb;box-shadow:0 2px 6px #59452b35;filter:sepia(.08) saturate(.9)}
+.collage img:first-child{grid-row:span 2}
+.photo-caption{font:italic 12px 'Cormorant Garamond',serif;color:#887653;text-align:right;margin:-5px 4px 13px}
+.notes{display:grid;gap:10px}
+.note{padding:10px 12px;background:#e9ddc4;border-left:2px solid #b28a51}
+.note h3{font-size:9px;text-transform:uppercase;letter-spacing:1.6px;color:#586347;margin:0 0 5px}
+.note p{font:15px/1.35 'Cormorant Garamond',serif;color:#4d4030;margin:0}
+.page-foot{margin-top:auto;padding-top:12px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #cbb993;color:#907d5c;font:italic 13px 'Cormorant Garamond',serif}
+.page-foot b{font:10px 'DM Sans';letter-spacing:1px;color:#8b7049}
+.left .collage{grid-template-rows:135px 135px}
+.right .page-heading{font-size:37px}
+.right .lead{font-size:18px}
+.right .notes{margin-top:9px}
+.right .note p{font-size:16px}
+.right .sketch{margin:auto auto 12px;width:110px;height:110px;border:1px solid #c6b18a;border-radius:50%;display:grid;place-items:center;color:#9c8054;font-size:54px;opacity:.7}
+.nav{display:flex;justify-content:center;align-items:center;gap:14px;margin:20px auto 0;color:#e5d4b5}
+.nav button{border:1px solid #9d7c50;background:#493022;color:#f0dfbd;padding:11px 17px;font:10px 'DM Sans';letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:.2s}
+.nav button:hover:not(:disabled){background:#6a452b;transform:translateY(-2px)}
+.nav button:disabled{opacity:.35;cursor:not-allowed}
+.page-count{font-size:10px;letter-spacing:2px;min-width:90px;text-align:center;color:#d3bd97}
+.back-home{display:block;margin:14px auto 0;border:0;background:none;color:#bda57f;text-decoration:underline;text-underline-offset:4px;cursor:pointer;font-size:10px;letter-spacing:1px}
+.turning{animation:turn .48s ease}
+@keyframes turn{0%{opacity:1;transform:rotateY(0)}45%{opacity:.35;transform:rotateY(-8deg)}100%{opacity:1;transform:rotateY(0)}}
+@media(max-width:760px){
+ .shell{padding:22px 10px}.book-spread{grid-template-columns:1fr;min-height:unset}
+ .page{min-height:unset;padding:27px 25px 22px;border-radius:6px!important}
+ .page.left{display:none}
+ .page.right{box-shadow:0 10px 24px #34221555}
+ .collage{grid-template-rows:130px 130px}
+ .page:before{inset:10px}
+ .journal{max-width:540px;margin:auto}
+}
+@media(min-width:761px){.page.right .collage{grid-template-rows:145px 145px}}
+@media(max-width:420px){.book-cover{min-height:480px}.cover-content{padding-left:66px;padding-right:28px}.page-heading{font-size:34px}.collage{grid-template-rows:112px 112px}.nav{gap:7px}.nav button{padding:10px 11px;font-size:9px}}
+</style>
+</head>
+<body>
+<div class="shell"><main class="scene">
+<section class="cover-screen" id="coverScreen">
+  <div class="intro"><div class="eyebrow">A little book of big adventures</div><h1>Our little world tour</h1><p>Twenty places. A thousand memories waiting to happen.</p></div>
+  <button class="book-cover" id="openBook" aria-label="Open our travel journal">
+    <span class="spine"></span>
+    <span class="cover-content">
+      <span class="cover-ornament">✦　✧　✦</span>
+      <span class="cover-small">The travel journal of</span>
+      <span class="cover-title">Our little<br>world tour</span>
+      <span class="cover-rule"></span>
+      <span class="cover-sub">An atlas of extraordinary places<br>and someday adventures</span>
+      <span class="cover-compass">✥</span>
+      <span class="cover-small">Est. with love · 2026</span>
+    </span>
+  </button>
+  <div class="click-hint">✦ Click the journal to open ✦</div>
+</section>
+
+<section class="journal" id="journal">
+  <div class="book-spread" id="spread">
+    <article class="page left">
+      <div class="page-inner">
+        <div class="page-top"><span>Field notes · <span id="leftNo">01</span></span><span class="star">✦</span></div>
+        <div class="place-country" id="leftCountry" style="margin-top:24px">A place to remember</div>
+        <h2 class="page-heading" id="leftTitle">The beginning of somewhere</h2>
+        <p class="lead" id="leftLead">Every great adventure starts with a place we have only dreamed about.</p>
+        <div class="collage" id="leftCollage"></div>
+        <div class="photo-caption">Postcards from somewhere extraordinary</div>
+        <div class="notes">
+          <div class="note"><h3>✧ Did you know?</h3><p id="leftFact"></p></div>
+        </div>
+        <div class="page-foot"><span>Collected for our someday list</span><b id="leftPage">01</b></div>
+      </div>
+    </article>
+    <article class="page right" id="rightPage">
+      <div class="page-inner">
+        <div class="page-top"><span>Our world tour</span><span class="star">✦</span></div>
+        <div class="place-country" id="rightCountry" style="margin-top:23px">Destination</div>
+        <h2 class="page-heading" id="rightTitle">A wonderful place</h2>
+        <p class="lead" id="rightLead"></p>
+        <div class="collage" id="rightCollage"></div>
+        <div class="photo-caption" id="photoCaption">A little glimpse of the world</div>
+        <div class="notes">
+          <div class="note"><h3>✧ The little wonder</h3><p id="rightFact"></p></div>
+          <div class="note"><h3>✧ Our someday moment</h3><p id="rightMoment"></p></div>
+        </div>
+        <div class="sketch" id="sketch">✧</div>
+        <div class="page-foot"><span>To be continued, together</span><b id="rightPage">01</b></div>
+      </div>
+    </article>
+  </div>
+  <nav class="nav" aria-label="Journal pages">
+    <button id="prev" disabled>← Previous</button>
+    <span class="page-count" id="pageCount">01 / 20</span>
+    <button id="next">Next place →</button>
+  </nav>
+  <button class="back-home" id="closeBook">Close journal · back to cover</button>
+</section>
+</main></div>
+<script>
+const places=[
+{title:"Waitomo Glowworm Caves",country:"New Zealand",lead:"A hidden galaxy beneath the ground, where thousands of tiny lights shimmer above a silent underground river.",fact:"The blue-green lights are made by glowworm larvae. Their glow helps attract insects into sticky silk threads.",moment:"Take a quiet guided boat ride through the cave and look up at a living starry sky.",icon:"✧",imgs:["photo-1518837695005-2083093ee35b","photo-1500534623283-312aade485b7","photo-1470770841072-f978cf4d019e"]},
+{title:"Zhangjiajie",country:"China",lead:"A dreamlike forest of towering stone pillars, often wrapped in drifting clouds and mist.",fact:"The sandstone pillars of Zhangjiajie National Forest Park helped inspire the floating mountain landscapes in the film Avatar.",moment:"Ride the dramatic Bailong Elevator, explore the mountain paths and watch the peaks emerge from the mist.",icon:"⛰",imgs:["photo-1501785888041-af3ef285b470","photo-1464822759023-fed622ff2c3b","photo-1470252649378-9c29740c9fa8"]},
+{title:"Deadvlei",country:"Namib-Naukluft National Park, Namibia",lead:"A pale clay pan, ancient black trees and enormous orange dunes — a landscape that feels almost otherworldly.",fact:"Some of the camel thorn trees are thought to be around 900 years old. The extremely dry conditions stopped them from decomposing.",moment:"Walk across the white pan in the soft morning light and watch the dunes change colour as the sun rises.",icon:"☼",imgs:["photo-1509316785289-025f5b846b35","photo-1500530855697-b586d89ba3ee","photo-1470252649378-9c29740c9fa8"]},
+{title:"Derinkuyu Underground City",country:"Cappadocia, Türkiye",lead:"A whole hidden world carved beneath the earth: winding tunnels, storage rooms and ancient gathering spaces.",fact:"The underground city extends to around 85 metres deep and could shelter thousands of people.",moment:"Explore the historic passageways with a local guide and imagine what daily life was like beneath the surface.",icon:"⌂",imgs:["photo-1519608487953-e999c86e7455","photo-1470770841072-f978cf4d019e","photo-1500530855697-b586d89ba3ee"]},
+{title:"Chocolate Hills",country:"Bohol, Philippines",lead:"Hundreds of rounded hills roll across the horizon like a giant landscape made for a storybook.",fact:"There are more than 1,200 hills. In the dry season, their grass turns brown, giving them their chocolate-inspired name.",moment:"Climb to a lookout point and take in the extraordinary view over the sea of hills.",icon:"◒",imgs:["photo-1500534623283-312aade485b7","photo-1470770841072-f978cf4d019e","photo-1501785888041-af3ef285b470"]},
+{title:"Crystal Ice Caves",country:"Vatnajökull, Iceland",lead:"Walk through glowing blue ice beneath a glacier, surrounded by sculpted walls and ancient frozen layers.",fact:"Glacier caves change shape every season. They should only be visited with a qualified guide because conditions can change.",moment:"Join a guided glacier-cave trip and see the deep blue ice up close — an experience that feels like entering another world.",icon:"❄",imgs:["photo-1517299321609-52687d1bc55a","photo-1464822759023-fed622ff2c3b","photo-1501785888041-af3ef285b470"]},
+{title:"Tsingy de Bemaraha",country:"Madagascar",lead:"A surreal stone forest of sharp limestone pinnacles, narrow canyons and hidden passages.",fact:"The word “tsingy” is often translated as “where one cannot walk barefoot” — a fitting description of this limestone labyrinth.",moment:"Follow an authorised route with a local guide, crossing walkways and bridges above the extraordinary rock formations.",icon:"♢",imgs:["photo-1464822759023-fed622ff2c3b","photo-1500530855697-b586d89ba3ee","photo-1470770841072-f978cf4d019e"]},
+{title:"Hashima Island",country:"Nagasaki, Japan",lead:"An abandoned island city of weathered concrete buildings, standing quiet against the sea.",fact:"Hashima was once one of the most densely populated places on Earth. Its coal mine closed in 1974.",moment:"Take an official boat tour and view the atmospheric island from the designated visitor areas.",icon:"▥",imgs:["photo-1519608487953-e999c86e7455","photo-1500530855697-b586d89ba3ee","photo-1518837695005-2083093ee35b"]},
+{title:"Lake Hillier",country:"Western Australia",lead:"A bubblegum-pink lake set beside the deep blue ocean and green coastal forest.",fact:"Its pink colour is linked to salt-loving microorganisms. The shade can vary with the season and conditions.",moment:"See the striking colour contrast from an authorised scenic flight or approved viewpoint.",icon:"◉",imgs:["photo-1500375592092-40eb2168fd21","photo-1500534623283-312aade485b7","photo-1518837695005-2083093ee35b"]},
+{title:"Salar de Uyuni",country:"Bolivia",lead:"The world’s largest salt flat can turn into a giant mirror after rain, blurring the line between earth and sky.",fact:"The salt flat covers more than 10,000 square kilometres and is one of the most extraordinary high-altitude landscapes on Earth.",moment:"Visit with a local operator. If the weather is right, take photos in the incredible mirror-like reflections.",icon:"✧",imgs:["photo-1470252649378-9c29740c9fa8","photo-1500530855697-b586d89ba3ee","photo-1501785888041-af3ef285b470"]},
+{title:"Ruakuri Cave",country:"Waitomo, New Zealand",lead:"A dramatic underground world of limestone curves, glowing formations and the sound of hidden streams.",fact:"Ruakuri is known for its spiral entrance and an impressive walkway that winds through the cave.",moment:"Take the guided cave walk and listen to the underground river echo through the chambers.",icon:"⌁",imgs:["photo-1518837695005-2083093ee35b","photo-1519608487953-e999c86e7455","photo-1500375592092-40eb2168fd21"]},
+{title:"Wadi Rum",country:"Jordan",lead:"A vast red desert of sandstone mountains, natural arches and extraordinary silence beneath a huge sky.",fact:"Wadi Rum is a UNESCO World Heritage Site, with thousands of years of human history recorded in its landscape.",moment:"Explore with a Bedouin guide, watch the sunset over the red sands and look up at the stars after dark.",icon:"☾",imgs:["photo-1509316785289-025f5b846b35","photo-1500530855697-b586d89ba3ee","photo-1470252649378-9c29740c9fa8"]},
+{title:"Moeraki Boulders",country:"Otago, New Zealand",lead:"Huge, almost perfectly round boulders lie scattered along a stretch of wild coastline.",fact:"The boulders formed inside ancient seafloor sediments over millions of years, gradually becoming spherical.",moment:"Visit at low tide and wander among the mysterious stone spheres along the beach.",icon:"◯",imgs:["photo-1518837695005-2083093ee35b","photo-1470770841072-f978cf4d019e","photo-1501785888041-af3ef285b470"]},
+{title:"Darvaza Gas Crater",country:"Karakum Desert, Turkmenistan",lead:"A huge desert crater glowing with natural gas flames — especially striking against the night sky.",fact:"The crater has burned for decades. Access and travel arrangements can be restricted, so current official travel advice is essential.",moment:"Keep this extraordinary stop on the dream list and only consider a visit if official guidance and local conditions allow it.",icon:"♨",imgs:["photo-1509316785289-025f5b846b35","photo-1518837695005-2083093ee35b","photo-1470252649378-9c29740c9fa8"]},
+{title:"Victoria Falls",country:"Zambia & Zimbabwe",lead:"A mighty curtain of water plunges into a deep gorge, sending a cloud of mist high into the air.",fact:"The falls are known locally as Mosi-oa-Tunya — “The Smoke That Thunders.”",moment:"Explore the rainforest viewpoints and feel the spray from one of the world’s great natural wonders.",icon:"≋",imgs:["photo-1433086966358-54859d0ed716","photo-1500375592092-40eb2168fd21","photo-1470770841072-f978cf4d019e"]},
+{title:"Mosquito Bay",country:"Vieques, Puerto Rico",lead:"On a dark night, the water can sparkle electric blue as microscopic organisms light up when the water moves.",fact:"The glow is produced by tiny dinoflagellates. Mosquito Bay is famous for its bioluminescence.",moment:"Take a guided night kayak tour, ideally on a moonless evening, for the best chance of seeing the glow.",icon:"✦",imgs:["photo-1500375592092-40eb2168fd21","photo-1518837695005-2083093ee35b","photo-1544551763-46a013bb70d5"]},
+{title:"Antelope Canyon",country:"Arizona, USA",lead:"Flowing sandstone walls twist into a narrow passage filled with warm colours and beautiful shifting light.",fact:"The canyon was shaped by flash floods and erosion. Visits are managed by Navajo operators and require a guided tour.",moment:"Join a guided walk and watch the sunlight bring out the curves and colours of the sandstone.",icon:"⌁",imgs:["photo-1500530855697-b586d89ba3ee","photo-1509316785289-025f5b846b35","photo-1464822759023-fed622ff2c3b"]},
+{title:"Cappadocia",country:"Türkiye",lead:"Fairy chimneys, cave homes and valleys create a landscape that feels like a place from a beautiful old tale.",fact:"People carved homes, churches and entire underground settlements into the region’s soft volcanic rock.",moment:"Find a sunrise viewpoint and watch hot-air balloons rise over the valleys and rock formations.",icon:"✧",imgs:["photo-1470252649378-9c29740c9fa8","photo-1501785888041-af3ef285b470","photo-1500534623283-312aade485b7"]},
+{title:"The Great Blue Hole",country:"Belize",lead:"A vast circular marine sinkhole, deep blue against the bright turquoise waters of the Caribbean Sea.",fact:"The Great Blue Hole is about 300 metres across and more than 120 metres deep.",moment:"Take a responsible scenic flight for the breathtaking full view, or choose a certified marine excursion.",icon:"◎",imgs:["photo-1544551763-46a013bb70d5","photo-1500375592092-40eb2168fd21","photo-1518837695005-2083093ee35b"]},
+{title:"Socotra Island",country:"Yemen",lead:"A remote island with extraordinary dragon blood trees, unusual plants and dramatic coastal scenery.",fact:"Many of Socotra’s plant species are found nowhere else on Earth. Travel is currently subject to serious safety and access concerns.",moment:"Keep this one as a far-off dream for a time when official travel advice and local conditions make a visit safe and feasible.",icon:"♧",imgs:["photo-1464822759023-fed622ff2c3b","photo-1500530855697-b586d89ba3ee","photo-1501785888041-af3ef285b470"]}
+];
+const cover=document.getElementById('coverScreen'),journal=document.getElementById('journal');
+let index=0,opened=false;
+const photo=(id)=>`https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=82`;
+function collage(el,imgs){el.innerHTML=imgs.map((id,i)=>`<img src="${photo(id)}" alt="Impression ${i+1}" loading="lazy">`).join('')}
+function render(){
+ const p=places[index],n=String(index+1).padStart(2,'0');
+ document.getElementById('leftNo').textContent=n;
+ document.getElementById('leftCountry').textContent=p.country;
+ document.getElementById('leftTitle').textContent=p.title;
+ document.getElementById('leftLead').textContent=p.lead;
+ document.getElementById('leftFact').textContent=p.fact;
+ document.getElementById('leftPage').textContent=n;
+ document.getElementById('rightCountry').textContent=p.country;
+ document.getElementById('rightTitle').textContent=p.title;
+ document.getElementById('rightLead').textContent=p.lead;
+ document.getElementById('rightFact').textContent=p.fact;
+ document.getElementById('rightMoment').textContent=p.moment;
+ document.getElementById('rightPage').textContent=n;
+ document.getElementById('photoCaption').textContent=`A little glimpse of ${p.title}`;
+ document.getElementById('sketch').textContent=p.icon;
+ collage(document.getElementById('leftCollage'),p.imgs);
+ collage(document.getElementById('rightCollage'),[...p.imgs].reverse());
+ document.getElementById('pageCount').textContent=`${n} / 20`;
+ document.getElementById('prev').disabled=index===0;
+ document.getElementById('next').textContent=index===places.length-1?'Back to the first place ↺':'Next place →';
+}
+function animateTurn(){const spread=document.getElementById('spread');spread.classList.remove('turning');void spread.offsetWidth;spread.classList.add('turning')}
+document.getElementById('openBook').addEventListener('click',()=>{
+ cover.style.opacity='0';cover.style.transform='translateY(-12px) scale(.97)';
+ setTimeout(()=>{cover.style.display='none';journal.classList.add('open');render();requestAnimationFrame(()=>journal.classList.add('visible'));opened=true},420);
+});
+document.getElementById('next').addEventListener('click',()=>{index=index===places.length-1?0:index+1;animateTurn();setTimeout(render,180)});
+document.getElementById('prev').addEventListener('click',()=>{if(index>0){index--;animateTurn();setTimeout(render,180)}});
+document.getElementById('closeBook').addEventListener('click',()=>{
+ journal.classList.remove('visible');setTimeout(()=>{journal.classList.remove('open');cover.style.display='flex';requestAnimationFrame(()=>{cover.style.opacity='1';cover.style.transform='translateY(0)'})},400);
+});
+render();
+</script>
+</body>
+</html>
